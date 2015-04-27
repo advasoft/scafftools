@@ -1,0 +1,46 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: makedb
+scopeName: source.mkdb
+fileTypes: ["mkdb"]
+uuid: fbece50b-b66f-4f0a-b800-e690cfd5069a
+
+patterns:
+
+- comment: Keywords with variable names
+  name: variable.complex.mkdb
+  match: ^\s*(db|t)\s+([\w\/]+)?
+  captures:
+    '1': {name: keyword.other.mkdb}
+    '2': {name: variable.parameter.mkdb}
+
+- comment: Keywords
+  name: keyword.other.mkdb
+  match: ^\s*(db|t)
+
+- comment: Command
+  name: variable.complex.mkdb
+  begin: '^\s*(\w+)\s+(bi|bn|b|c|i|dtmo|dtm|dt|d|nvc|tx|ntx|n|f|m|nc|si|sm|v|t|ts|u|vb|vc|x)([\d\.]+)?(\s+(z))?(\s+(<)?(k|i)(>)?(\s+(a)([\d\.]+))?)?(\s+(f)\s+([\w\/]+)(>)(\w+)(\s+(uc|un|ud)?\s+(dc|dn|dd)?)?)?'
+  beginCaptures:
+    '1': {name: string.unquoted.mkdb}
+    '2': {name: keyword.other.mkdb}
+    '3': {name: constant.numeric.mkdb}
+    '5': {name: keyword.control.mkdb}
+    '7': {name: keyword.operator.mkdb}
+    '8': {name: keyword.control.mkdb}
+    '9': {name: keyword.operator.mkdb}
+    '11': {name: keyword.operator.mkdb}
+    '12': {name: constant.numeric.mkdb}
+    '14': {name: keyword.operator.mkdb}
+    '15': {name: variable.parameter.mkdb}
+    '16': {name: keyword.operator.mkdb}
+    '17': {name: string.unquoted.mkdb}
+    '19': {name: constant.numeric.mkdb}
+    '20': {name: constant.numeric.mkdb}
+  end: '$'
+
+- comment: Field name
+  name: string.unquoted.mkdb
+  match: ^\s*(\w+)\b
+
+...

@@ -1,0 +1,51 @@
+﻿db [db_name] - create database
+t [table_name|scheme_name/table_name] - create table
+[column_name] [n k a i u z f uc un ud dc dn dd]- table column name
+	n - column type
+		i 			- int
+		n5.2 		- numeric(5,2)
+		bi 			- bigint
+		b 			- bit
+		bn128 		- binary
+		c50			- char
+		dt 			- date
+		dtm 		- datetime
+		dtm27 		- datetime2(7)
+		dtmo7 		- datetimeoffset(7)
+		tx 			- text
+		ntx			- ntext
+		d18.2 		- decimal(18,2)
+		nvc50		- nvarchar(50)
+		nvc 		- nvarchar(MAX)
+		f 			- float
+		m 			- money
+		nc10 		- nchar(10)
+		nc 			- nchar(MAX)
+		si 			- smallint
+		sm 			- smallmoney
+		v 			- sql_variant
+		t7 			- time(7)
+		ts 			- timestamp
+		u 			- uniqueidentifier
+		vb128 		- varbinary(128)
+		vb 			- varbinary(MAX)
+		vc50 		- varchar(50)
+		vc 			- varchar(MAX)
+		x 			- xml
+
+	k - primary key (<k ASC - default, k> DESC)
+	a - auto compute primary key step (a1.1 - IDENTITY(1,1))
+	i - index column (<i ASC - default, i> DESC)
+	u - unique value (<u ASC - default, u> DESC)
+	z - zero (NULL) by default NOT NULL
+	f [uniq_table>uniq_key] [u|d] - outer foreign key scheme_name/uniq_table>uniq_key, 
+		u - action on update:
+			u - default, nothing
+			uc - cascade update
+			un - set NULL
+			ud - set default
+		d - action on delete:
+			d - default, nothing
+			dc - cascade delete
+			dn - set null
+			dd - set default
