@@ -47,8 +47,24 @@ namespace scafftools.makedb
                 return;
             }
 
-		    var mkdbContent = new MkdbFileReader(options.SourcePath).ReadFileContent();
-		    Db model;
+            string mkdbContent = "";
+            try
+            {
+                mkdbContent = new MkdbFileReader(options.SourcePath).ReadFileContent();
+            }
+            catch (ApplicationException ae)
+            {
+                Console.WriteLine(ae.Message);
+                return;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Something wrong");
+                return;
+            }
+
+            Db model;
 		    try
 		    {
                 model = MkdbParser.Parse(mkdbContent);
