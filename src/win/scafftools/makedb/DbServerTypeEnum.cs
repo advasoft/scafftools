@@ -23,4 +23,5 @@ namespace scafftools.makedb
 		/// </summary>
 		oracle
 	}
+
 }

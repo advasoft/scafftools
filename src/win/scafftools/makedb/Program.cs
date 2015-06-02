@@ -17,12 +17,50 @@
  * Written by Denis Kozlov <deniskozlov@outlook.com>, April, 26 2015
  */
 
+
 namespace scafftools.makedb
 {
+	using Scheme;
+	using System;
+	using Model;
+	using Utilities;
+
+
 	class Program
 	{
 		static void Main(string[] args)
 		{
+			OptionSet options = default(OptionSet);
+
+			try
+			{
+				options = ArgumentsParser.ParseArguments<OptionSet>(args);
+            }
+			catch (ConsoleArgumentsParseException cexception)
+			{
+				Console.WriteLine(cexception.Message);
+			    return;
+			}
+			catch (Exception)
+			{
+				Console.WriteLine("Something wrong");
+                return;
+            }
+
+		    var mkdbContent = new MkdbFileReader(options.SourcePath).ReadFileContent();
+		    Db model;
+		    try
+		    {
+                model = MkdbParser.Parse(mkdbContent);
+            }
+            catch (InvalidMkdbFileStructureException e)
+		    {
+                Console.WriteLine("Invalid file structure at line {0}", e.Line);
+                return;
+            }
+
+		    ISchemeCreator creator = SchemeCreatorFactory.CreateSchemeCreator(options.ServerType);
+		    var scheme = creator.GenerateScript(model);
 		}
 	}
 }

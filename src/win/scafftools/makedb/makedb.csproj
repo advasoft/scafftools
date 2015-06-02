@@ -42,8 +42,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbServerTypeEnum.cs" />
+    <Compile Include="Model\Column.cs" />
+    <Compile Include="Model\ColumnTypes.cs" />
+    <Compile Include="Model\Db.cs" />
+    <Compile Include="Model\Index.cs" />
+    <Compile Include="Model\InvalidMkdbFileStructureException.cs" />
+    <Compile Include="Model\InvalidMkdbParseException.cs" />
+    <Compile Include="Model\Key.cs" />
+    <Compile Include="Model\MkdbParser.cs" />
+    <Compile Include="Model\Relation.cs" />
+    <Compile Include="Model\SortDirectory.cs" />
+    <Compile Include="Model\Table.cs" />
+    <Compile Include="Model\Unique.cs" />
+    <Compile Include="Model\UpdateDeleteAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scheme\BaseSchemeCreator.cs" />
+    <Compile Include="Scheme\ISchemeCreator.cs" />
+    <Compile Include="Scheme\MsSqlServerSchemeCreator.cs" />
+    <Compile Include="Scheme\SchemeCreatorFactory.cs" />
+    <Compile Include="Utilities\ArgumentsParser.cs" />
+    <Compile Include="Utilities\ConsoleArgumentsParseException.cs" />
+    <Compile Include="Utilities\MkdbFileReader.cs" />
+    <Compile Include="Utilities\OptionAttribute.cs" />
+    <Compile Include="Utilities\OptionSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -51,6 +73,7 @@
   <ItemGroup>
     <Content Include="Readme.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
