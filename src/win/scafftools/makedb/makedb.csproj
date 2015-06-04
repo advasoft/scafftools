@@ -62,6 +62,7 @@
     <Compile Include="Scheme\MsSqlServerSchemeCreator.cs" />
     <Compile Include="Scheme\SchemeCreatorFactory.cs" />
     <Compile Include="Utilities\ArgumentsParser.cs" />
+    <Compile Include="Utilities\ColumnTypesHelper.cs" />
     <Compile Include="Utilities\ConsoleArgumentsParseException.cs" />
     <Compile Include="Utilities\MkdbFileReader.cs" />
     <Compile Include="Utilities\OptionAttribute.cs" />

@@ -20,13 +20,13 @@
 
 namespace scafftools.makedb
 {
-	using Scheme;
-	using System;
-	using Model;
-	using Utilities;
+    using Scheme;
+    using System;
+    using Model;
+    using Utilities;
+    using System.IO;
 
-
-	class Program
+    class Program
 	{
 		static void Main(string[] args)
 		{
@@ -77,6 +77,39 @@ namespace scafftools.makedb
 
 		    ISchemeCreator creator = SchemeCreatorFactory.CreateSchemeCreator(options.ServerType);
 		    var scheme = creator.GenerateScript(model);
+
+            //try save file
+            try
+            {
+                if (options.OutputPath == string.Empty)
+                {
+                    options.OutputPath = Environment.CurrentDirectory;
+                }
+
+                var fullpath = Path.Combine(options.OutputPath, Path.ChangeExtension(model.Name, ".sql"));
+                if(!Directory.Exists(options.OutputPath))
+                {
+                    Directory.CreateDirectory(options.OutputPath);
+                }
+
+                if (options.Force && File.Exists(fullpath))
+                {
+                    File.Delete(fullpath);
+                    File.WriteAllText(fullpath, scheme);
+                }
+                else if((!options.Force) && File.Exists(fullpath))
+                {}
+                else
+                {
+                    File.WriteAllText(fullpath, scheme);
+                }
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
 		}
 	}
 }
