@@ -1,5 +1,5 @@
 ﻿
-namespace scafftools.makedb.Utilities
+namespace scafftools.Utilities
 {
 	using System;
 

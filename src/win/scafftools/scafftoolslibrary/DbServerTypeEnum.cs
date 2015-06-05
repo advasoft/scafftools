@@ -1,5 +1,5 @@
 ﻿
-namespace scafftools.makedb
+namespace scafftools
 {
 	/// <summary>
 	/// Database server type

@@ -1,7 +1,8 @@
 ﻿
+
 using scafftools.Utilities;
 
-namespace scafftools.makedb.Utilities
+namespace scafftools.makedomain.Utilities
 {
 
     /// <summary>
@@ -20,9 +21,9 @@ namespace scafftools.makedb.Utilities
         #region options
 
         /// <summary>
-        /// (required) server type
+        /// server type
         /// </summary>
-        [Option("s", Required = true)]
+        [Option("s", Required = false)]
         public DbServerTypeEnum ServerType { get; set; }
 
         /// <summary>
@@ -38,10 +39,10 @@ namespace scafftools.makedb.Utilities
         public bool Force { get; set; }
 
 		/// <summary>
-		/// mkdb files path
+		/// json serialized mkdb model path
 		/// </summary>
-		[Option("p", Required = true)]
-		public string SourcePath { get; set; }
+		[Option("m", Required = false)]
+		public string ModelPath { get; set; }
 
 		/// <summary>
 		/// path for generated script
@@ -50,10 +51,10 @@ namespace scafftools.makedb.Utilities
 		public string OutputPath { get; set; }
 
 		/// <summary>
-		/// Create database
+		/// Programming language type
 		/// </summary>
-		[Option("d", IsFlag = true)]
-		public bool GenerateDb { get; set; }
+		[Option("l", Required = true)]
+		public LanguageTypeEnum LanguageType { get; set; }
 
 		#endregion
 

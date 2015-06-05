@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22609.0
+VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "makedb", "makedb\makedb.csproj", "{6FE6BCE6-9C06-42D3-8972-BA4306BC2190}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "makedomain", "makedomain\makedomain.csproj", "{50304708-190E-4C71-A7D5-687201247EDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scafftoolslibrary", "scafftoolslibrary\scafftoolslibrary.csproj", "{2A77EF5D-A896-42E6-8556-3C8BD58A4F7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{6FE6BCE6-9C06-42D3-8972-BA4306BC2190}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FE6BCE6-9C06-42D3-8972-BA4306BC2190}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FE6BCE6-9C06-42D3-8972-BA4306BC2190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50304708-190E-4C71-A7D5-687201247EDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50304708-190E-4C71-A7D5-687201247EDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50304708-190E-4C71-A7D5-687201247EDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50304708-190E-4C71-A7D5-687201247EDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A77EF5D-A896-42E6-8556-3C8BD58A4F7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A77EF5D-A896-42E6-8556-3C8BD58A4F7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A77EF5D-A896-42E6-8556-3C8BD58A4F7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A77EF5D-A896-42E6-8556-3C8BD58A4F7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

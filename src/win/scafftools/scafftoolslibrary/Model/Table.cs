@@ -1,9 +1,11 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
-namespace scafftools.makedb.Model
+namespace scafftools.Model
 {
-	public class Table
+    [Serializable]
+    public class Table
 	{
 		public Table()
 		{

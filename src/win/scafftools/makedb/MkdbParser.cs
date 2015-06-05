@@ -2,6 +2,7 @@
 namespace scafftools.makedb.Model
 {
     using scafftools.makedb.Utilities;
+    using scafftools.Model;
     using System;
     using System.Linq;
     using System.Text.RegularExpressions;

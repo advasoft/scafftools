@@ -1,7 +1,10 @@
 ﻿
-namespace scafftools.makedb.Model
+using System;
+
+namespace scafftools.Model
 {
-	public class Relation
+    [Serializable]
+    public class Relation
 	{
 		public Column UniqueColumnKey { get; set; }
 

@@ -1,7 +1,10 @@
 ﻿
-namespace scafftools.makedb.Model
+using System;
+
+namespace scafftools.Model
 {
-	public enum ColumnTypes
+    [Serializable]
+    public enum ColumnTypes
 	{
 		Int,
 		BigInt,

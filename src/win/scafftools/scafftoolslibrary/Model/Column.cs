@@ -1,6 +1,9 @@
 ﻿
-namespace scafftools.makedb.Model
+using System;
+
+namespace scafftools.Model
 {
+    [Serializable]
 	public class Column
 	{
 		public string Name { get; set; }

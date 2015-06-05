@@ -25,6 +25,9 @@ namespace scafftools.makedb
     using Model;
     using Utilities;
     using System.IO;
+    using Newtonsoft.Json;
+    using scafftools.Model;
+    using scafftools.Utilities;
 
     class Program
 	{
@@ -87,7 +90,8 @@ namespace scafftools.makedb
                 }
 
                 var fullpath = Path.Combine(options.OutputPath, Path.ChangeExtension(model.Name, ".sql"));
-                if(!Directory.Exists(options.OutputPath))
+                var jsonFullPath = Path.Combine(options.OutputPath, Path.ChangeExtension(model.Name, ".json"));
+                if (!Directory.Exists(options.OutputPath))
                 {
                     Directory.CreateDirectory(options.OutputPath);
                 }
@@ -96,6 +100,7 @@ namespace scafftools.makedb
                 {
                     File.Delete(fullpath);
                     File.WriteAllText(fullpath, scheme);
+
                 }
                 else if((!options.Force) && File.Exists(fullpath))
                 {}
@@ -104,8 +109,11 @@ namespace scafftools.makedb
                     File.WriteAllText(fullpath, scheme);
                 }
 
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(File.CreateText(jsonFullPath), model, typeof(Db));
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }

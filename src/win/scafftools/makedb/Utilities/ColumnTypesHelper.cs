@@ -1,5 +1,5 @@
 ﻿
-using scafftools.makedb.Model;
+using scafftools.Model;
 using System;
 
 namespace scafftools.makedb.Utilities
