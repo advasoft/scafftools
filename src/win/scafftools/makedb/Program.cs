@@ -99,9 +99,10 @@ namespace scafftools.makedb
             string scheme = string.Empty;
 
             Console.Write("Create MS SQL Server database scheme....");
+            ISchemeCreator creator = default(ISchemeCreator);
             try
             {
-                ISchemeCreator creator = SchemeCreatorFactory.CreateSchemeCreator(options.ServerType);
+                creator = SchemeCreatorFactory.CreateSchemeCreator(options.ServerType);
                 scheme = creator.GenerateScript(model);
                 Console.Write("done\r\n");
             }
@@ -162,7 +163,24 @@ namespace scafftools.makedb
                     fs.Close();
 
             }
+            if(options.GenerateDb && !string.IsNullOrEmpty(options.ConnectionString) && !string.IsNullOrEmpty(scheme) && creator != null)
+            {
+                Console.Write("Generating database '{0}'....", model.Name);
+                try
+                {
+                    creator.GenerateDatabase(options.ConnectionString, scheme);
+                    Console.Write("done\r\n");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return;
+                }
+
+            }
+
             Console.WriteLine("Completed");
+            Console.ReadKey();
         }
 	}
 }
