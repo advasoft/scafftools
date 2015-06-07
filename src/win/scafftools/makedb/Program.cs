@@ -51,10 +51,25 @@ namespace scafftools.makedb
                 return;
             }
 
+            #region header
+            Console.WriteLine("*********************************************************");
+            Console.WriteLine("*\t\t\t\t\t\t\t*");
+            Console.WriteLine("*\t\t\tMAKEDB  \t\t\t*");
+            Console.WriteLine("*\t\tGENERATE DB SCHEMA APPLICATION \t\t*");
+            Console.WriteLine("*\t\t\t\t\t\t\t*");
+            Console.WriteLine("*\tAUTHOR DENIS KOZLOV (DENISKOZLOV@OUTLOOK.COM) \t*");
+            Console.WriteLine("*\t\t\t 2015\t\t\t\t*");
+            Console.WriteLine("*\t\t\t\t\t\t\t*");
+            Console.WriteLine("*********************************************************");
+            Console.WriteLine("");
+            #endregion
+
+            Console.Write("Read mkdb file....");
             string mkdbContent = "";
             try
             {
                 mkdbContent = new MkdbFileReader(options.SourcePath).ReadFileContent();
+                Console.Write("done\r\n");
             }
             catch (ApplicationException ae)
             {
@@ -68,10 +83,12 @@ namespace scafftools.makedb
                 return;
             }
 
+            Console.Write("Create mkdb model....");
             Db model;
 		    try
 		    {
                 model = MkdbParser.Parse(mkdbContent);
+                Console.Write("done\r\n");
             }
             catch (InvalidMkdbFileStructureException e)
 		    {
@@ -79,8 +96,20 @@ namespace scafftools.makedb
                 return;
             }
 
-		    ISchemeCreator creator = SchemeCreatorFactory.CreateSchemeCreator(options.ServerType);
-		    var scheme = creator.GenerateScript(model);
+            string scheme = string.Empty;
+
+            Console.Write("Create MS SQL Server database scheme....");
+            try
+            {
+                ISchemeCreator creator = SchemeCreatorFactory.CreateSchemeCreator(options.ServerType);
+                scheme = creator.GenerateScript(model);
+                Console.Write("done\r\n");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
 
             //try save file
             XmlDictionaryWriter writer = default(XmlDictionaryWriter);
@@ -103,13 +132,14 @@ namespace scafftools.makedb
                 {
                     File.Delete(fullpath);
                     File.WriteAllText(fullpath, scheme);
-
+                    Console.WriteLine("Saved sql script to '{0}'", fullpath);
                 }
                 else if ((!options.Force) && File.Exists(fullpath))
                 { }
                 else
                 {
                     File.WriteAllText(fullpath, scheme);
+                    Console.WriteLine("Saved sql script to '{0}'", fullpath);
                 }
 
 
@@ -118,7 +148,7 @@ namespace scafftools.makedb
                 writer = JsonReaderWriterFactory.CreateJsonWriter(fs);
                 DataContractJsonSerializer serializator = new DataContractJsonSerializer(typeof(Db));
                 serializator.WriteObject(writer, model);
-
+                Console.WriteLine("Saved mkdb model to '{0}'", jsonFullPath);
             }
             catch (Exception ex)
             {
@@ -132,7 +162,7 @@ namespace scafftools.makedb
                     fs.Close();
 
             }
-
+            Console.WriteLine("Completed");
         }
 	}
 }
