@@ -17,9 +17,14 @@
  * Written by Denis Kozlov <deniskozlov@outlook.com>, June, 5 2015
  */
 
+
+using makedomain.Code;
+using Newtonsoft.Json;
 using scafftools.makedomain.Utilities;
+using scafftools.Model;
 using scafftools.Utilities;
 using System;
+using System.IO;
 
 namespace makedomain
 {
@@ -42,6 +47,102 @@ namespace makedomain
             {
                 Console.WriteLine("Something wrong");
                 return;
+            }
+
+
+            if(string.IsNullOrEmpty(options.ConnectionString) && string.IsNullOrEmpty(options.ModelPath))
+            {
+                Console.WriteLine("Model path or server type and connection string must be passed");
+                return;
+            }
+
+            Db model = default(Db);
+
+            if (!string.IsNullOrEmpty(options.ModelPath))
+            {
+                if(!File.Exists(options.ModelPath))
+                {
+                    Console.WriteLine("Model file '" + options.ModelPath + "' not exist");
+                    return;
+                }
+
+                try
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    using (StreamReader sm = File.OpenText(options.ModelPath))
+                    {
+                        using (JsonTextReader reader = new JsonTextReader(sm))
+                        {
+                            model = serializer.Deserialize<Db>(reader);
+                        }
+                    }
+
+
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return;
+                }
+            }
+            else
+            {
+                //TODO: implement later...
+            }
+
+            var basePath = options.OutputPath;
+            ICodeGenerator generator = CodeGeneratorFactory.GetCodeGenerator(options.LanguageType);
+            if(generator != null)
+            {
+                try
+                {
+                    foreach (var table in model.Tables)
+                    {
+                        string filePath = string.Empty;
+
+                        var tableNameStings = table.Name.Split('.');
+                        if (tableNameStings.Length > 1)
+                        {
+                            string directory = basePath;
+                            for (int i = 0; i < tableNameStings.Length - 1; i++)
+                            {
+                                directory = Path.Combine(directory, tableNameStings[i]);
+                            }
+                            if (!Directory.Exists(directory))
+                            {
+                                Directory.CreateDirectory(directory);
+                            }
+
+                            var fileName = tableNameStings[tableNameStings.Length - 1];
+                            if (fileName.ToLower().EndsWith("s"))
+                                fileName = fileName.Remove(fileName.Length - 1);
+                            filePath = Path.Combine(directory, Path.ChangeExtension(fileName, ("." + generator.GetExtension())));
+                        }
+                        else
+                        {
+                            var fileName = table.Name;
+                            if (fileName.ToLower().EndsWith("s"))
+                                fileName = fileName.Remove(fileName.Length - 1);
+
+                            filePath = Path.Combine(basePath, Path.ChangeExtension(fileName, ("." + generator.GetExtension())));
+                        }
+
+                        string rootNamespace = model.Name + ".domains";
+
+                        var codeString = generator.GenerateClass(table, rootNamespace, model);
+
+                        File.WriteAllText(filePath, codeString);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+            else
+            {
+                throw new ApplicationException("Unknown language generator");
             }
 
         }

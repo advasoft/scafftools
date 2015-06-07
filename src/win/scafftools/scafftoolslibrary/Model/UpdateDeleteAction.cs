@@ -1,14 +1,20 @@
 ﻿
 using System;
+using System.Runtime.Serialization;
 
 namespace scafftools.Model
 {
+    [DataContract]
     [Serializable]
     public enum UpdateDeleteAction
 	{
-		NoAction,
-		Cascade,
-		SetNull,
-		SetDefault
+        [EnumMember]
+        NoAction,
+        [EnumMember]
+        Cascade,
+        [EnumMember]
+        SetNull,
+        [EnumMember]
+        SetDefault
 	}
 }

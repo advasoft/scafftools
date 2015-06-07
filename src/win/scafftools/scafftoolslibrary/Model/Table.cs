@@ -1,9 +1,11 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace scafftools.Model
 {
+    [DataContract]
     [Serializable]
     public class Table
 	{
@@ -17,12 +19,18 @@ namespace scafftools.Model
 
 		}
 
-		public string Name { get; set; }
+        [DataMember]
+        public string Name { get; set; }
 
-		public IList<Column> Columns { get; private set; }
-		public IList<Key> Keys { get; private set; }
-		public IList<Index> Indexes { get; private set; }
-		public IList<Unique> Uniques { get; private set; }
-		public IList<Relation> Relations { get; private set; }
+        [DataMember]
+        public IList<Column> Columns { get; private set; }
+        [DataMember]
+        public IList<Key> Keys { get; private set; }
+        [DataMember]
+        public IList<Index> Indexes { get; private set; }
+        [DataMember]
+        public IList<Unique> Uniques { get; private set; }
+        [DataMember]
+        public IList<Relation> Relations { get; private set; }
 	}
 }

@@ -2,9 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace scafftools.Model
 {
+    [DataContract]
     [Serializable]
     public class Db
 	{
@@ -13,8 +15,10 @@ namespace scafftools.Model
 			Tables = new List<Table>();
         }
 
-		public string Name { get; set; }
+        [DataMember]
+        public string Name { get; set; }
 
-		public IList<Table> Tables { get; private set; }
+        [DataMember]
+        public IList<Table> Tables { get; private set; }
 	}
 }

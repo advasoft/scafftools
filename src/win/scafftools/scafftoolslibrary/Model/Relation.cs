@@ -1,19 +1,26 @@
 ﻿
 using System;
+using System.Runtime.Serialization;
 
 namespace scafftools.Model
 {
+    [DataContract]
     [Serializable]
     public class Relation
 	{
-		public Column UniqueColumnKey { get; set; }
+        [DataMember]
+        public Column UniqueColumnKey { get; set; }
 
-		public Table OuterTable { get; set; }
+        [DataMember]
+        public Table OuterTable { get; set; }
 
-		public Column OuterColumnKey { get; set; }
+        [DataMember]
+        public Column OuterColumnKey { get; set; }
 
-		public UpdateDeleteAction ActionOnUpdate { get; set; }
+        [DataMember]
+        public UpdateDeleteAction ActionOnUpdate { get; set; }
 
-		public UpdateDeleteAction ActionOnDelete { get; set; }
+        [DataMember]
+        public UpdateDeleteAction ActionOnDelete { get; set; }
 	}
 }

@@ -25,9 +25,10 @@ namespace scafftools.makedb
     using Model;
     using Utilities;
     using System.IO;
-    using Newtonsoft.Json;
     using scafftools.Model;
     using scafftools.Utilities;
+    using System.Runtime.Serialization.Json;
+    using System.Xml;
 
     class Program
 	{
@@ -82,6 +83,8 @@ namespace scafftools.makedb
 		    var scheme = creator.GenerateScript(model);
 
             //try save file
+            XmlDictionaryWriter writer = default(XmlDictionaryWriter);
+            FileStream fs = default(FileStream);
             try
             {
                 if (options.OutputPath == string.Empty)
@@ -102,22 +105,34 @@ namespace scafftools.makedb
                     File.WriteAllText(fullpath, scheme);
 
                 }
-                else if((!options.Force) && File.Exists(fullpath))
-                {}
+                else if ((!options.Force) && File.Exists(fullpath))
+                { }
                 else
                 {
                     File.WriteAllText(fullpath, scheme);
                 }
 
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(File.CreateText(jsonFullPath), model, typeof(Db));
+
+                fs = new FileStream(jsonFullPath,
+                    FileMode.Create);
+                writer = JsonReaderWriterFactory.CreateJsonWriter(fs);
+                DataContractJsonSerializer serializator = new DataContractJsonSerializer(typeof(Db));
+                serializator.WriteObject(writer, model);
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+            finally
+            {
+                if(writer != null)
+                    writer.Close();
+                if(fs != null)
+                    fs.Close();
 
-		}
+            }
+
+        }
 	}
 }
