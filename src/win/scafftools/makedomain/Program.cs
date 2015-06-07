@@ -49,23 +49,35 @@ namespace makedomain
                 return;
             }
 
-
             if(string.IsNullOrEmpty(options.ConnectionString) && string.IsNullOrEmpty(options.ModelPath))
             {
                 Console.WriteLine("Model path or server type and connection string must be passed");
                 return;
             }
 
+            #region header
+            Console.WriteLine("*********************************************************");
+            Console.WriteLine("*\t\t\t\t\t\t\t*");
+            Console.WriteLine("*\t\t\tMAKEDOMAIN  \t\t\t*");
+            Console.WriteLine("*\t\tGENERATE DOMAIN MODEL CLASSES \t\t*");
+            Console.WriteLine("*\t\t\t\t\t\t\t*");
+            Console.WriteLine("*\tAUTHOR DENIS KOZLOV (DENISKOZLOV@OUTLOOK.COM) \t*");
+            Console.WriteLine("*\t\t\t 2015\t\t\t\t*");
+            Console.WriteLine("*\t\t\t\t\t\t\t*");
+            Console.WriteLine("*********************************************************");
+            Console.WriteLine("");
+            #endregion
+
             Db model = default(Db);
 
             if (!string.IsNullOrEmpty(options.ModelPath))
             {
-                if(!File.Exists(options.ModelPath))
+                if (!File.Exists(options.ModelPath))
                 {
                     Console.WriteLine("Model file '" + options.ModelPath + "' not exist");
                     return;
                 }
-
+                Console.Write("Read mkdb model file....");
                 try
                 {
                     JsonSerializer serializer = new JsonSerializer();
@@ -76,7 +88,7 @@ namespace makedomain
                             model = serializer.Deserialize<Db>(reader);
                         }
                     }
-
+                    Console.Write("done\r\n");
 
                 }
                 catch(Exception ex)
@@ -132,6 +144,7 @@ namespace makedomain
                         var codeString = generator.GenerateClass(table, rootNamespace, model);
 
                         File.WriteAllText(filePath, codeString);
+                        Console.WriteLine("Saved domain class to '{0}'", filePath);
                     }
                 }
                 catch (Exception ex)
@@ -144,7 +157,7 @@ namespace makedomain
             {
                 throw new ApplicationException("Unknown language generator");
             }
-
+            Console.WriteLine("Completed");
         }
     }
 }

@@ -180,7 +180,6 @@ namespace scafftools.makedb
             }
 
             Console.WriteLine("Completed");
-            Console.ReadKey();
         }
 	}
 }
