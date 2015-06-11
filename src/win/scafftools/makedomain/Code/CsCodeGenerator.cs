@@ -5,6 +5,7 @@ using System.Text;
 using System.Linq;
 using System.Collections;
 using System.Collections.Specialized;
+using makedomain.Utilities;
 
 namespace makedomain.Code
 {
@@ -16,7 +17,7 @@ namespace makedomain.Code
             string @namespace = rootNamespace;
 
             StringCollection addedNameSpaces = new StringCollection();
-            addedNameSpaces.Add(GetFullNamespace(rootNamespace, table.Name));
+            addedNameSpaces.Add(NamingUtility.GetFullNamespace(rootNamespace, table.Name));
 
             // @@@ scafftools makedomain generated @@@
             // @@@ at 01.06.2015 00:43:59 @@@
@@ -30,7 +31,7 @@ namespace makedomain.Code
             builder.AppendLine("using System.Collections.Generic;");
             foreach (var relation in table.Relations)
             {
-                var nms = GetFullNamespace(@namespace, relation.OuterTable.Name);
+                var nms = NamingUtility.GetFullNamespace(@namespace, relation.OuterTable.Name);
                 if (!addedNameSpaces.Contains(nms))
                 {
                     builder.AppendFormat("using {0};\r\n", nms);
@@ -41,7 +42,7 @@ namespace makedomain.Code
             {
                 foreach (var relation in outTable.Relations.Where(r => r.OuterTable.Name == table.Name))
                 {
-                    var nms = GetFullNamespace(@namespace, outTable.Name);
+                    var nms = NamingUtility.GetFullNamespace(@namespace, outTable.Name);
                     if (!addedNameSpaces.Contains(nms))
                     {
                         builder.AppendFormat("using {0};\r\n", nms);
@@ -53,16 +54,12 @@ namespace makedomain.Code
             builder.AppendLine("");
 
             //namespace
-            builder.AppendFormat("namespace {0}\r\n", GetFullNamespace(rootNamespace, table.Name));
+            builder.AppendFormat("namespace {0}\r\n", NamingUtility.GetFullNamespace(rootNamespace, table.Name));
             builder.AppendLine("{");
 
             //class
 
-            var className = GetCleanTableName(table.Name);
-            if(className.ToLower().EndsWith("s"))
-            {
-                className = className.Remove(className.Length - 1);
-            }
+            var className = NamingUtility.RemoveSFromName(NamingUtility.GetCleanTableName(table.Name));
 
             builder.AppendFormat("\tpublic class {0}\r\n", className);
             builder.AppendFormat("\t");
@@ -88,18 +85,12 @@ namespace makedomain.Code
 
             foreach(var relation in table.Relations)
             {
-                var propertyName = relation.UniqueColumnKey.Name;
-                if(propertyName.ToLower().EndsWith("id"))
-                {
-                    propertyName = propertyName.Remove(propertyName.Length - 2);
-                }
-                else if(propertyName.ToLower().EndsWith("_id"))
-                {
-                    propertyName = propertyName.Remove(propertyName.Length - 3);
-                }
+                var propertyName = NamingUtility.RemoveIdFromName(relation.UniqueColumnKey.Name);
 
-                builder.AppendFormat("\t\tpublic virtual {0} {1} ", 
-                    GetCleanTableName(relation.OuterTable.Name), propertyName);
+                var cleanTableName = NamingUtility.GetCleanTableName(relation.OuterTable.Name);
+
+                builder.AppendFormat("\t\tpublic virtual {0} {1} ",
+                    NamingUtility.RemoveSFromName(cleanTableName), propertyName);
                 builder.Append("{ get; set; }");
                 builder.AppendFormat("\r\n");
 
@@ -110,18 +101,10 @@ namespace makedomain.Code
             {
                 foreach(var relation in outTable.Relations.Where(r => r.OuterTable.Name == table.Name))
                 {
-                    var propertyName = relation.UniqueColumnKey.Name;
-                    if (propertyName.ToLower().EndsWith("id"))
-                    {
-                        propertyName = propertyName.Remove(propertyName.Length - 2);
-                    }
-                    else if (propertyName.ToLower().EndsWith("_id"))
-                    {
-                        propertyName = propertyName.Remove(propertyName.Length - 3);
-                    }
+                    var propertyName = NamingUtility.GetCleanTableName(outTable.Name);
 
                     builder.AppendFormat("\t\tpublic virtual ICollection<{0}> {1} ",
-                        GetCleanTableName(outTable.Name), propertyName + "s");
+                        NamingUtility.RemoveSFromName(NamingUtility.GetCleanTableName(outTable.Name)), propertyName);
                     builder.Append("{ get; set; }");
                     builder.AppendFormat("\r\n");
 
@@ -283,28 +266,5 @@ namespace makedomain.Code
             return type;
         }
 
-        private string GetFullNamespace(string rootNamespace, string tableName)
-        {
-            string @namespace = rootNamespace;
-            var nameArray = tableName.Split('.');
-            if (nameArray.Length > 1)
-                return rootNamespace;
-
-            for(int i = 0; i < nameArray.Length - 1; i++)
-            {
-                @namespace = string.Concat(@namespace, ".", nameArray[i]);
-            }
-
-            return @namespace;
-        }
-
-        private string GetCleanTableName(string tableName)
-        {
-            var nameArray = tableName.Split('.');
-            if (nameArray.Length > 1)
-                return nameArray[nameArray.Length - 1];
-
-            return tableName;
-        }
     }
 }

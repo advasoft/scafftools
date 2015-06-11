@@ -29,6 +29,8 @@ namespace scafftools.makedb
     using scafftools.Utilities;
     using System.Runtime.Serialization.Json;
     using System.Xml;
+    using Newtonsoft.Json;
+    using System.Text;
 
     class Program
 	{
@@ -123,7 +125,7 @@ namespace scafftools.makedb
                 }
 
                 var fullpath = Path.Combine(options.OutputPath, Path.ChangeExtension(model.Name, ".sql"));
-                var jsonFullPath = Path.Combine(options.OutputPath, Path.ChangeExtension(model.Name, ".json"));
+                var jsonFullPath = Path.Combine(options.OutputPath, Path.ChangeExtension(Path.GetFileNameWithoutExtension(options.SourcePath), ".json"));
                 if (!Directory.Exists(options.OutputPath))
                 {
                     Directory.CreateDirectory(options.OutputPath);
@@ -144,11 +146,26 @@ namespace scafftools.makedb
                 }
 
 
-                fs = new FileStream(jsonFullPath,
-                    FileMode.Create);
-                writer = JsonReaderWriterFactory.CreateJsonWriter(fs);
-                DataContractJsonSerializer serializator = new DataContractJsonSerializer(typeof(Db));
-                serializator.WriteObject(writer, model);
+                //fs = new FileStream(jsonFullPath,
+                //    FileMode.Create);
+                //writer = JsonReaderWriterFactory.CreateJsonWriter(fs);
+                //DataContractJsonSerializer serializator = new DataContractJsonSerializer(typeof(Db));
+                //serializator.WriteObject(writer, model);
+
+                var jsonSerializer = new JsonSerializer
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore,
+                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize
+                };
+
+                var sb = new StringBuilder();
+                using (var sw = new StringWriter(sb))
+                using (var jtw = new JsonTextWriter(sw))
+                    jsonSerializer.Serialize(jtw, model);
+
+                var result = sb.ToString();
+                File.WriteAllText(jsonFullPath, result);
                 Console.WriteLine("Saved mkdb model to '{0}'", jsonFullPath);
             }
             catch (Exception ex)

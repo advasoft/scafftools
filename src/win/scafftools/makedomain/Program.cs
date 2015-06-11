@@ -126,8 +126,16 @@ namespace makedomain
                             }
 
                             var fileName = tableNameStings[tableNameStings.Length - 1];
-                            if (fileName.ToLower().EndsWith("s"))
+                            if (fileName.ToLower().EndsWith("ses"))
+                                fileName = fileName.Remove(fileName.Length - 2);
+                            else if (fileName.ToLower().EndsWith("ies"))
+                            {
+                                fileName = fileName.Remove(fileName.Length - 3);
+                                fileName = fileName + "y";
+                            }
+                            else if (fileName.ToLower().EndsWith("s"))
                                 fileName = fileName.Remove(fileName.Length - 1);
+                            
                             filePath = Path.Combine(directory, Path.ChangeExtension(fileName, ("." + generator.GetExtension())));
                         }
                         else
@@ -139,7 +147,7 @@ namespace makedomain
                             filePath = Path.Combine(basePath, Path.ChangeExtension(fileName, ("." + generator.GetExtension())));
                         }
 
-                        string rootNamespace = model.Name + ".domains";
+                        string rootNamespace = Path.GetFileNameWithoutExtension(options.ModelPath) + ".domains";
 
                         var codeString = generator.GenerateClass(table, rootNamespace, model);
 

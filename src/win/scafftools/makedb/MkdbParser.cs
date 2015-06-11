@@ -13,9 +13,9 @@ namespace scafftools.makedb.Model
         {
             const RegexOptions options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline;
 
-            Regex dbRgx = new Regex("^\\s*db\\s+(?<db>[\\w\\/]+)?", options);
-            Regex tableRgx = new Regex("^\\s*t\\s+(?<table>[\\w\\/]+)?", options);
-            Regex commandRgx = new Regex("^\\s*(?<name>\\w+)\\s+(?<type>bi|bn|b|c|i|dtmo|dtm|dt|d|nvc|tx|ntx|n|f|m|nc|si|sm|v|t|ts|u|vb|vc|x)(?<type_qual>[\\d\\.]+)?(?<nullable>\\s+(z))?(\\s+(?<asc><)?(?<key_index>k|i)(?<desc>>)?(\\s+(?<auto_key>a)(?<auto_key_qual>[\\d\\.]+))?)?(\\s+(?<foreign>f)\\s+(?<outer_table>[\\w\\/]+)(>)(?<outer_column>\\w+)(\\s+(?<update_action>uc|un|ud)?\\s+(?<delete_action>dc|dn|dd)?)?)?", options);
+            Regex dbRgx = new Regex("^[\\s\\t]*db\\s+(?<db>[\\w\\/]+)?", options);
+            Regex tableRgx = new Regex("^[\\s\\t]*t\\s+(?<table>[\\w\\/]+)?", options);
+            Regex commandRgx = new Regex("^[\\s\\t]*(?<name>\\w+)\\s+(?<type>bi|bn|b|c|i|dtmo|dtm2|dtm|dt|d|nvc|tx|ntx|n|f|m|nc|si|sm|vb|ts|t|u|vc|v|x)(?<type_qual>[\\d\\.]+)?(?<nullable>\\s+(z))?(\\s+(?<asc><)?(?<key_index>k|i)(?<desc>>)?(\\s+(?<auto_key>a)(?<auto_key_qual>[\\d\\.]+))?)?(\\s+(?<foreign>f)\\s+(?<outer_table>[\\w\\/]+)(>)(?<outer_column>\\w+)(\\s+(?<update_action>uc|un|ud)?\\s+(?<delete_action>dc|dn|dd)?)?)?", options);
 
             Db lastDb = null;
             Table lastTable = null;
