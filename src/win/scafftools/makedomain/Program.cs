@@ -24,6 +24,7 @@ using scafftools.makedomain.Utilities;
 using scafftools.Model;
 using scafftools.Utilities;
 using System;
+using System.Collections.Specialized;
 using System.IO;
 
 namespace makedomain
@@ -149,10 +150,22 @@ namespace makedomain
 
                         string rootNamespace = Path.GetFileNameWithoutExtension(options.ModelPath) + ".domains";
 
-                        var codeString = generator.GenerateClass(table, rootNamespace, model);
 
-                        File.WriteAllText(filePath, codeString);
-                        Console.WriteLine("Saved domain class to '{0}'", filePath);
+                        if (File.Exists(filePath) && options.Force)
+                        {
+                            string safedCode = generator.GetSafedCode(File.ReadAllText(filePath));
+                            var codeString = generator.GenerateClass(table, rootNamespace, model, safedCode);
+                            File.WriteAllText(filePath, codeString);
+                            Console.WriteLine("Saved domain class to '{0}'", filePath);
+                        }
+                        else
+                        {
+                            var codeString = generator.GenerateClass(table, rootNamespace, model);
+                            File.WriteAllText(filePath, codeString);
+                            Console.WriteLine("Saved domain class to '{0}'", filePath);
+                        }
+
+                        
                     }
                 }
                 catch (Exception ex)

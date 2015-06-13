@@ -11,7 +11,7 @@ namespace makedomain.Code
 {
     public class CsCodeGenerator : ICodeGenerator
     {
-        public string GenerateClass(Table table, string rootNamespace, Db model)
+        public string GenerateClass(Table table, string rootNamespace, Db model, string safedCode = "")
         {
             StringBuilder builder = new StringBuilder();
             string @namespace = rootNamespace;
@@ -77,6 +77,7 @@ namespace makedomain.Code
                 }
 
                 //property
+                builder.AppendLine("\t\t// @@@ scafftools property generated @@@");
                 builder.AppendFormat("\t\tpublic {0}{1} {2} ", typeName, nullable == true ? "?" : "", field.Name);
                 builder.Append("{ get; set; }");
                 builder.AppendFormat("\r\n");
@@ -89,6 +90,7 @@ namespace makedomain.Code
 
                 var cleanTableName = NamingUtility.GetCleanTableName(relation.OuterTable.Name);
 
+                builder.AppendLine("\t\t// @@@ scafftools makedomain generated @@@");
                 builder.AppendFormat("\t\tpublic virtual {0} {1} ",
                     NamingUtility.RemoveSFromName(cleanTableName), propertyName);
                 builder.Append("{ get; set; }");
@@ -103,12 +105,19 @@ namespace makedomain.Code
                 {
                     var propertyName = NamingUtility.GetCleanTableName(outTable.Name);
 
+                    builder.AppendLine("\t\t// @@@ scafftools makedomain generated @@@");
                     builder.AppendFormat("\t\tpublic virtual ICollection<{0}> {1} ",
                         NamingUtility.RemoveSFromName(NamingUtility.GetCleanTableName(outTable.Name)), propertyName);
                     builder.Append("{ get; set; }");
                     builder.AppendFormat("\r\n");
 
                 }
+            }
+
+            //back safed code
+            if(safedCode != string.Empty)
+            {
+                builder.Append(safedCode);
             }
 
             //end of class
@@ -126,6 +135,29 @@ namespace makedomain.Code
         {
             return "cs";
         }
+
+        public string GetSafedCode(string code)
+        {
+            string safedCode = string.Empty;
+            if (code.Contains("@@@ scafftools safed code begin"))
+            {
+                int startPosition = code.IndexOf("@@@ scafftools safed code begin") + 31;
+                int endPosition = code.IndexOf("// @@@ scafftools safed code end");
+                if(endPosition == -1)
+                {
+                    endPosition = code.IndexOf("//@@@ scafftools safed code end");
+                }
+                if (endPosition == -1)
+                    endPosition = code.Length;
+                StringBuilder b = new StringBuilder("\t\t// @@@ scafftools safed code begin\r\n");
+                b.Append(code.Substring(startPosition, endPosition - startPosition));
+                b.AppendLine("//@@@ scafftools safed code end");
+                safedCode = b.ToString();
+
+            }
+            return safedCode;
+        }
+
 
         public string GetTypeName(ColumnTypes type)
         {
